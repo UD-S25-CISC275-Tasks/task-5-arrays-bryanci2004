@@ -8,7 +8,7 @@ export function bookEndList(numbers: number[]): number[] {
     if (numbers.length === 0) {
         return numbers;
     } else if (numbers.length === 1) {
-        return numbers.map((eachNum: number): number => eachNum * 2);
+        return [numbers[0], numbers[0]];
     } else {
         return [numbers[0], numbers[numbers.length - 1]];
     }
@@ -65,7 +65,7 @@ export const shoutIfExclaiming = (messages: string[]): string[] => {
  * 4 letters long.
  */
 export function countShortWords(words: string[]): number {
-    return 0;
+    return words.filter((word) => word.length < 4).length;
 }
 
 /**
@@ -74,7 +74,9 @@ export function countShortWords(words: string[]): number {
  * then return true.
  */
 export function allRGB(colors: string[]): boolean {
-    return false;
+    return colors.every(
+        (color) => color === "red" || color === "blue" || color === "green",
+    );
 }
 
 /**
@@ -85,7 +87,13 @@ export function allRGB(colors: string[]): boolean {
  * And the array [] would become "0=0".
  */
 export function makeMath(addends: number[]): string {
-    return "";
+    if (addends.length === 0) {
+        return "0=0";
+    }
+
+    const sum = addends.reduce((acc, num) => acc + num, 0);
+    const addendsString = addends.join("+");
+    return `${sum}=${addendsString}`;
 }
 
 /**
@@ -98,5 +106,20 @@ export function makeMath(addends: number[]): string {
  * And the array [1, 9, 7] would become [1, 9, 7, 17]
  */
 export function injectPositive(values: number[]): number[] {
-    return [];
+    const firstNegativeIndex = values.findIndex((n) => n < 0);
+
+    if (firstNegativeIndex === -1) {
+        const totalSum = values.reduce((sum, num) => sum + num, 0);
+        return [...values, totalSum];
+    }
+
+    const sumBeforeNegative = values
+        .slice(0, firstNegativeIndex)
+        .reduce((sum, num) => sum + num, 0);
+
+    return [
+        ...values.slice(0, firstNegativeIndex + 1),
+        sumBeforeNegative,
+        ...values.slice(firstNegativeIndex + 1),
+    ];
 }
